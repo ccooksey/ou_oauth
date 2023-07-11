@@ -139,22 +139,38 @@ function introspect(req, res) {
     // that the token actually exists. We can return other information as well.
     tokenDB.getUserIDFromAccessToken(req.body.token, (userID) => {
  
-        console.log('authenticator.js: introspect: tokenDB.getUserIDFromAccessToken: callback token = ', req.body.token);
+        console.log('authenticator.js: introspect: tokenDB.getUserIDFromAccessToken: userID = ', userID);
 
-        introspectionResponse = {
-            active: userID != null,
-            scope: "all",
-            client_id: userID,
-        };
+        if (userID == null) {
+            res.status(401).json({response: {active: false}});
+            return;
+        }
 
-        console.log('authenticator.js: introspect: tokenDB.getUserIDFromAccessToken: reponse = ', introspectionResponse);
+        userDB.getUserDetailsFromUserID(userID, (error, userDetails) => {
 
-        // Note that we are sending a complex object for Introspection, not just a single
-        // message. Introspection wants details!
-        // https://datatracker.ietf.org/doc/html/rfc7662#section-2.2
-        res.status(userID == null ? 401 : 200).json({
-            response: introspectionResponse,
-        });
+            console.log('authenticator.js: introspect: userDB.getUserDetailsFromUserID: callback error = ', error);
+            console.log('authenticator.js: introspect: userDB.getUserDetailsFromUserID: callback username = ', userDetails?.username);
+            console.log('authenticator.js: introspect: userDB.getUserDetailsFromUserID: callback eaddress = ', userDetails?.eaddress);
+
+            if (userDetails?.username == null) {
+                res.status(401).json({response: {active: false}});
+                return;
+            }
+
+            const introspectionResponse = {
+                active: true,
+                scope: "all",
+                client_id: userID,
+                username: userDetails.username
+            };
+
+            console.log('authenticator.js: introspect: tokenDB.getUserIDFromAccessToken: response = ', introspectionResponse);
+
+            // Note that we are sending a complex object for Introspection, not just a single
+            // message. Introspection wants details!
+            // https://datatracker.ietf.org/doc/html/rfc7662#section-2.2
+            res.status(200).json({response: introspectionResponse});
+        })
     });
 }
 

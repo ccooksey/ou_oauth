@@ -8,6 +8,7 @@ module.exports = (injectedDbPool) => {
         register,
         getUser,
         isValidUser,
+        getUserDetailsFromUserID,
     };
 };
 
@@ -97,6 +98,30 @@ function isValidUser(username, eaddress, cbFunc) {
             response?.rowCount === 0;
 
         cbFunc(response.error, isValidUser);
+    };
+
+    dbPool.query(query, values, queryCbFunc);
+}
+
+function getUserDetailsFromUserID(userID, cbFunc) {
+
+    console.log("userDB.js: getUserDetailsFromUserID: called");
+    console.log("userDB.js: getUserDetailsFromUserID: input userID = ", userID);
+
+    const query = 'SELECT * FROM users WHERE (id = $1);';
+    const values = [userID];
+
+    const queryCbFunc = (response) => {
+
+        console.log("userDB.js: getUserDetailsFromUserID: queryCbFunc: response = ", response);
+
+        const result = response?.error == null && response?.rowCount === 1 ?
+            {username: response.rowData[0]?.username,
+             eaddress: response.rowData[0]?.eaddress} : null;
+
+        console.log("userDB.js: getUserDetailsFromUserID: queryCbFunc: result = ", result);
+
+        cbFunc(response.error, result);
     };
 
     dbPool.query(query, values, queryCbFunc);
