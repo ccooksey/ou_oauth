@@ -6,10 +6,6 @@ and pg and mysql for database support. You can choose which database to use via 
 .env.production. Note that neither of these last two files exist in the project. Duplicate .env and
 fill out your credentials as needed.
 
-You could open the server up to the public, but I have no idea how secure or insecure it might be. So
-don't do that. Keep it on the same machine as your protected resource and client and use it only via
-localhost:9443/auth/...
-
 You will need either PostgreSQL or MySQL running on the same machine. Set the port numbers and
 credentials in .env.development or .env.production.
 
