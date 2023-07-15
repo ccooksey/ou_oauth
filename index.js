@@ -1,6 +1,3 @@
-// Example code followed for this project was found at:
-// https://blog.logrocket.com/implement-oauth-2-0-node-js/
-
 const fs = require('fs');
 const https = require('https');
 const dotenv = require('dotenv');
@@ -9,7 +6,7 @@ const dotenv = require('dotenv');
 dotenv.config({ path: `./.env.${process.env.NODE_ENV}` });
 
 // Database imports
-const database = require(process.env.SERVER_DB_WRAPPER);
+const database = require(process.env.DATABASE_WRAPPER);
 const tokenDB = require("./db/tokenDB")(database);
 const userDB = require("./db/userDB")(database);
 
@@ -23,8 +20,8 @@ const cors = require('cors');
 
 // Log our configuration
 console.log(`NODE_ENV = ${process.env.NODE_ENV}`);
-database.identifyDBWrapper();
 console.log(`Server located at ${__dirname}`);
+database.identifyDBWrapper();
 
 const app = express();
 
@@ -45,7 +42,7 @@ const testAPIRoutes = require("./test/testAPIRoutes.js")(express.Router(), app, 
 
 // Restrict CORS access as much as desired
 const corsOptions = { 
-    origin: process.env.SERVER_ALLOWED_ORIGINS,
+    origin: process.env.OU_OAUTH2_SERVER_ALLOWED_ORIGINS,
     methods: 'POST, DELETE, OPTIONS' 
 }
 app.use(cors(corsOptions));
@@ -61,15 +58,15 @@ function Development() {
 
 // Let's listen!
 if (Development()) {
-    app.listen(process.env.SERVER_PORT_HTTP, () => {
-        console.log(`HTTP server listening on port ${process.env.SERVER_PORT_HTTP}`)
+    app.listen(process.env.OU_OAUTH2_SERVER_PORT, () => {
+        console.log(`HTTP server listening on port ${process.env.OU_OAUTH2_SERVER_PORT}`)
     });
 } else {
     const options = {
-        key: fs.readFileSync(process.env.SERVER_PRIVATE_KEY_PATH),
-        cert: fs.readFileSync(process.env.SERVER_FULL_CHAIN_PATH)
+        key: fs.readFileSync(process.env.OU_OAUTH2_SERVER_PRIVATE_KEY_PATH),
+        cert: fs.readFileSync(process.env.OU_OAUTH2_SERVER_FULL_CHAIN_PATH)
     }
-    https.createServer(options, app).listen(process.env.SERVER_PORT_HTTPS, () => {
-        console.log(`HTTPS server listening on port ${process.env.SERVER_PORT_HTTPS}`)
+    https.createServer(options, app).listen(process.env.OU_OAUTH2_SERVER_PORT, () => {
+        console.log(`HTTPS server listening on port ${process.env.OU_OAUTH2_SERVER_PORT}`)
     });
 }

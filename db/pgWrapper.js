@@ -28,12 +28,12 @@ function identifyDBWrapper() {
 const Pool = require("pg").Pool;
 
 const pool = new Pool({
-    host: `${process.env.SERVER_DB_HOST}`,
-    port: process.env.SERVER_DB_PORT,
-    user: `${process.env.SERVER_DB_USER}`,
-    password: `${process.env.SERVER_DB_PASSWORD}`,
-    database: `${process.env.SERVER_DB_DATABASE}`,
-    max: process.env.SERVER_DB_CONNECTION_LIMIT,
+    host: `${process.env.DATABASE_HOST}`,
+    port: process.env.DATABASE_PORT,
+    user: `${process.env.DATABASE_USER}`,
+    password: `${process.env.DATABASE_PASSWORD}`,
+    database: `${process.env.DATABASE_DATABASE}`,
+    max: process.env.DATABASE_CONNECTION_LIMIT,
 });
 
 function query(queryString, values, cbFunc) {

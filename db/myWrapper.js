@@ -25,12 +25,12 @@ function identifyDBWrapper() {
 const mysql = require("mysql");
 
 const pool = mysql.createPool({
-    host: `${process.env.SERVER_DB_HOST}`,
-    port: process.env.SERVER_DB_PORT,
-    user: `${process.env.SERVER_DB_USER}`,
-    password: `${process.env.SERVER_DB_PASSWORD}`,
-    database: `${process.env.SERVER_DB_DATABASE}`,
-    connectionLimit: process.env.SERVER_DB_CONNECTION_LIMIT,
+    host: `${process.env.DATABASE_HOST}`,
+    port: process.env.DATABASE_PORT,
+    user: `${process.env.DATABASE_USER}`,
+    password: `${process.env.DATABASE_PASSWORD}`,
+    database: `${process.env.DATABASE_DATABASE}`,
+    connectionLimit: process.env.DATABASE_CONNECTION_LIMIT,
 });
 
 function query(queryString, values, cbFunc) {
