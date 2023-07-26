@@ -50,8 +50,8 @@ function getUser(username, password, cbFunc) {
     console.log("userDB.js: getUser: input password = ", password);
 
     var shaPass = crypto.createHash('sha256').update(password).digest('hex');
-    const query = 'SELECT * FROM users WHERE (username = $1 OR eaddress = $2) AND password = $3;';
-    const values = [username, username, shaPass];
+    const query = 'SELECT * FROM users WHERE username = $1 AND password = $2;';
+    const values = [username, shaPass];
 
     const queryCbFunc = (response) => {
 
